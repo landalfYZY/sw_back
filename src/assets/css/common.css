@@ -1,0 +1,164 @@
+body,h1,h2,h3,h4,h5,p,div,span,i,a{
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+/*省略号*/
+.ell-1{
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+.ell-2{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.ell-3{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.width-900{
+  width: 900px;
+}
+.font-16{
+  font-size: 16px
+}
+.pointer{
+  cursor: pointer;
+}
+.panel-center{
+  display: flex;
+  justify-content: center;
+}
+.item-center{
+  align-items: center;
+}
+.ell-4{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+.ell-5{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+}
+.panel-around{
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap
+}
+.panel-between{
+  display: flex;
+  justify-content: space-between;
+}
+.panel-start{
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap
+}
+.panel-end{
+  display: flex;
+  justify-content: flex-end;
+}
+.item-start{
+  align-items: flex-start
+}
+.margin-center{
+  margin: auto
+}
+.width-1200{
+  width: 1200px;
+}
+
+.clearfix{
+  clear: both;
+}
+.ui-link-default{
+  color: #66CCFF;
+  cursor: pointer;
+}
+.ui-link-default:hover{
+  color: #ffffff
+}
+.panel{
+  padding: 50px 0
+}
+.bg-gray{
+  background-color: #f3f3f3
+}
+.font-primary{
+  color: #0099ff
+}
+.font-success{
+  color: #00CC66
+}
+.font-danger{
+  color: #FF3333
+}
+.font-error{
+  color: #FF9933
+}
+.ui-btn{
+  line-height: 35px;
+  padding: 0 10px;
+  cursor: pointer;
+  border: 0;
+}
+.ui-btn:active{
+  outline: 0
+}
+.ui-btn-default{
+  background: #f3f3f3;
+  color: #444444
+}
+.ui-btn-default:hover{
+  background: #e7e7e7;
+}
+.ui-btn-primary{
+  background: #0099ff;
+  color: #fff
+}
+.ui-btn-success{
+  background: #00CC66;
+  color: #fff
+}
+.ui-btn-danger{
+  background: #FF3333;
+  color: #fff
+}
+.search-input{
+  line-height: 35px;
+  border: 0;
+  background: #f3f3f3;
+  width: 180px;
+  border-radius: 2px;
+  padding: 0 15px;
+}
+.search-input:focus{
+  outline: 0
+}
+.font-white{
+  color: #ffffff
+}
+.fp-over:hover{
+  color: #00CCFF
+}
+.pull-right{
+  float: right;
+}
+.pull-left{
+  float: left;
+}
+.font-main{
+  font-size: 16px;
+  font-weight: bold;
+  color: #464c5b
+}
+.item-end{
+  align-items: flex-end
+}

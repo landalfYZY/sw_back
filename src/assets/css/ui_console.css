@@ -1,0 +1,112 @@
+.console-sidebar{
+  width: 200px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+.console-sidebar > .sidebar-item{
+
+}
+
+.console-sidebar > .sidebar-item > .title{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 15px;
+  margin: 20px 0
+}
+.console-sidebar > .sidebar-item > .title >.label{
+  margin-left: 10px;
+  font-size: 16px
+}
+
+.console-sidebar > .sidebar-item > .sub-sidebar-item{
+  line-height: 40px;
+  font-size: 14px;
+  padding-left: 40px;
+  width: 200px;
+  cursor: pointer;
+  background: #ffffff
+}
+
+@keyframes changeBg{
+  from {background: #ffffff}
+  to {background: #e1e1e1}
+}
+.console-sidebar > .sidebar-item > .sub-sidebar-item:hover{
+  animation: changeBg 0.5s forwards
+}
+
+.console-body{
+  margin-top: 20px;
+  width: 1100px;
+}
+.console-body > .cb-panel{
+  width: 1000px;
+  margin: auto;
+  padding: 20px
+}
+.console-title{
+  display: flex;
+  justify-content: flex-start;
+  padding: 15px 0;
+  align-items: center
+}
+.console-title > .draw-line{
+  width: 4px;
+  height: 18px;
+  background: #0099ff
+}
+.console-title > .title{
+  margin-left: 15px;
+}
+.ui-console-step{
+  width: 1000px;
+  padding: 20px 100px;margin: auto
+}
+.gallery-panel{
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px 15px;
+  background: #f3f3f3
+}
+.gallery-list{
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding-top: 7px
+}
+.gallery-list > .gallery-item{
+  width: 150px;
+  margin-left: 8px;
+  margin-top: 8px;
+}
+.gallery-list > .gallery-item > .gallery-bg{
+  width: 150px;
+  height: 150px;
+  background-position: center;
+  background-size: cover;
+  overflow: hidden
+}
+.gallery-list > .gallery-item > .gallery-bg>.checkbox{
+  margin-left: 3px
+}
+.gallery-list > .gallery-item > .gallery-bg > .gallery-content{
+  margin-top: 100px;
+  padding: 5px 10px;
+  background: rgba(0,0,0,0.7)
+}
+.gallery-list > .gallery-item > .gallery-bg > .gallery-content > .do-look{
+  height: 0;
+  overflow: hidden
+}
+@keyframes marginSlowTop {
+  from {margin-top: 100px;}
+  to {margin-top: 80px}
+}
+.gallery-list > .gallery-item > .gallery-bg:hover > .gallery-content{
+  animation: marginSlowTop 0.2s forwards
+}
+.gallery-list > .gallery-item > .gallery-bg:hover > .gallery-content >.do-look{
+  height: auto;
+
+}
