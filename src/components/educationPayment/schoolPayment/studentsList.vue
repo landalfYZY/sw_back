@@ -89,8 +89,15 @@
           <el-form-item label="手机">
             <el-input v-model="studentData.phone" style="max-width:500px" placeholder="手机"></el-input>
           </el-form-item>
-          <el-table-column prop="schoolName" label="学校" :filters="schoolList" :filter-method="filterTagSchool" filter-placement="bottom-end">
-          </el-table-column>
+          <el-form-item label="学校">
+            <Select v-model="studentData.schoolName">
+              <Option :value="item.scName" :label="item.scName" v-for="(item,key,index) in realSchoolList" :key="item.sunwouId">
+                <div class="panel-between">
+                  <span>{{item.scName}}</span>
+                </div>
+              </Option>
+            </Select>
+          </el-form-item>
           <el-form-item label="入学年限">
             <el-input v-model="studentData.goSchoolTime" style="max-width:500px" placeholder="入学年限"></el-input>
           </el-form-item>
@@ -141,6 +148,8 @@
         multipleSelection: [],
         bankCardList: [],
         gradeList: [],
+        schoolList:[],
+        realSchoolList:[],
         classList:[],
         query: {
           fields: [],
@@ -190,6 +199,7 @@
       that.getGradeList();
       that.getClassList();
       that.getSchoolList();
+      that.getrealSchoolList();
     },
     methods: {
       submitUpdate(){
@@ -494,6 +504,31 @@
                 schoolList.push(school);
               })
               that.schoolList = schoolList;
+            } else {
+              that.$Message.error(res.msg);
+            }
+          }
+        });
+      },
+      getrealSchoolList() {
+        let query = {
+          fields: [],
+          wheres: [
+            { value: 'eduId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('school')).result.eduId },
+            { value: 'isDelete', opertionType: 'equal', opertionValue: false }
+          ],
+          sorts: [],
+          pages: {
+          }
+        }
+        $.ajax({
+          url: sessionStorage.getItem("API") + "schoolaccount/find",
+          type: "POST",
+          data: { query: JSON.stringify(query) },
+          dataType: "json",
+          success(res) {
+            if (res.code) {
+              that.realSchoolList = res.params.result;
             } else {
               that.$Message.error(res.msg);
             }

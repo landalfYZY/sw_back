@@ -13,7 +13,7 @@
             <div id="captchaBox" style="position:relative;top:-42px;opacity:0"></div>
           </div>
           <div style="width:300px;text-align:left;margin-top:30px">
-            <a style="color:#f3f3f3" href="https://www.sunwou.com" target="blank">大家地理首页</a>
+            <a style="color:#f3f3f3" href="https://www.sunwou.com" target="blank">大家科技首页</a>
           </div>
         </div>
         <div style="margin:auto;color:#aaa;width:500px;text-align:Center;margin-top:100px">
