@@ -180,7 +180,7 @@
           phone: '',
           goSchoolTime: '',
           classes: '',
-          eduId: JSON.parse(localStorage.getItem('school')).result.sunwouId
+          eduId: JSON.parse(localStorage.getItem('school')).result.eduId
         },
         ruleValidate: {
           WIDtotal_amount: [

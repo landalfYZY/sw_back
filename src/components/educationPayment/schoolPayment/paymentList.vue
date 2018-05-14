@@ -278,7 +278,7 @@
         $.ajax({
           url: sessionStorage.getItem("API") + "payaccount/goSchoolTimeList",
           type: "POST",
-          data: { eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId },
+          data: { eduId: JSON.parse(localStorage.getItem('school')).result.eduId },
           dataType: "json",
           success(res) {
             if (res.code) {
@@ -298,7 +298,7 @@
         $.ajax({
           url: sessionStorage.getItem("API") + "payaccount/classesList",
           type: "POST",
-          data: { eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId },
+          data: { eduId: JSON.parse(localStorage.getItem('school')).result.eduId },
           dataType: "json",
           success(res) {
             if (res.code) {
@@ -318,7 +318,7 @@
         $.ajax({
           url: sessionStorage.getItem("API") + "payaccount/schoolNameList",
           type: "POST",
-          data: { eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId },
+          data: { eduId: JSON.parse(localStorage.getItem('school')).result.eduId },
           dataType: "json",
           success(res) {
             if (res.code) {
