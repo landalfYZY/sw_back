@@ -16,7 +16,7 @@
             </div>
           </div>
           <div style="margin:auto;color:#aaa;width:500px;text-align:Center;margin-top:100px">
-            杭州双沃网络科技有限公司©2017 双沃科技 浙ICP备18011227号
+            浙江大家地理信息科技有限公司©2017 双沃科技 浙ICP备18011227号
           </div>
         </div>
       </div>
