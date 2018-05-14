@@ -4,7 +4,7 @@
 
       <div class="panel-between">
         <div class="panel-start">
-          <button class="ui-btn ui-btn-default" @click="multiAddTrans">
+          <button class="ui-btn ui-btn-default" @click="putOut">
             <Icon type="ios-cloud-download" color="green"></Icon>&nbsp;&nbsp;导出Excel</button>
           <!-- <button class="ui-btn ui-btn-default" @click="multiDel(null,'删除')">
             <Icon type="trash-a" color="#FF3333"></Icon>&nbsp;&nbsp;批量删除</button> -->
@@ -156,6 +156,9 @@
       that.getSchoolList();
     },
     methods: {
+       putOut() {
+
+      },
        returnFee(payment) {
         that.returnPay.sunwouId = payment.sunwouId;
         that.returnPay.max = payment.total_amount;
@@ -325,7 +328,6 @@
                 schoolList.push(school);
               })
               that.schoolList = schoolList;
-              that.payItemCompanyList = that.payItemCompanyList.concat(schoolList);
             } else {
               that.$Message.error(res.msg);
             }
