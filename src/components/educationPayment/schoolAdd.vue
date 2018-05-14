@@ -39,7 +39,8 @@
           scAddress: '',
           scAdminName: '',
           scAdminPhone: '',
-          scConfig: ''
+          scConfig: '',
+          eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId
         }
       }
     },

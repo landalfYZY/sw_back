@@ -9,8 +9,8 @@
           <button class="ui-btn ui-btn-default" @click="multiDel(null,'批量删除')">
             <Icon type="trash-a" color="#FF3333"></Icon>&nbsp;&nbsp;批量删除</button>
           <el-upload class="upload-demo" :action="ip+'filesystem/upfile'" :http-request="uploadFile" :multiple="false" :show-file-list="false">
-            <el-button size="small" class="uploadbtn" type="primary">
-              <i class="el-icon-upload el-icon--right"></i>Excel导入</el-button>
+            <button size="small" class="uploadbtn" type="primary">
+              <i class="el-icon-upload el-icon--right"></i>Excel导入</button>
           </el-upload>
         </div>
         <div class="panel-end">
@@ -24,6 +24,8 @@
         <el-table-column prop="name" label="姓名"> </el-table-column>
         <el-table-column prop="idCard" label="身份证号"> </el-table-column>
         <el-table-column prop="phone" label="手机号"> </el-table-column>
+        <el-table-column prop="schoolName" label="学校" :filters="schoolList" :filter-method="filterTagSchool" filter-placement="bottom-end">
+        </el-table-column>
         <el-table-column prop="goSchoolTime" label="入学年限" :filters="gradeList" :filter-method="filterTagGrade" filter-placement="bottom-end">
         </el-table-column>
         <el-table-column prop="classes" label="班级" :filters="classList" :filter-method="filterTagClass" filter-placement="bottom-end"> </el-table-column>
@@ -87,6 +89,8 @@
           <el-form-item label="手机">
             <el-input v-model="studentData.phone" style="max-width:500px" placeholder="手机"></el-input>
           </el-form-item>
+          <el-table-column prop="schoolName" label="学校" :filters="schoolList" :filter-method="filterTagSchool" filter-placement="bottom-end">
+          </el-table-column>
           <el-form-item label="入学年限">
             <el-input v-model="studentData.goSchoolTime" style="max-width:500px" placeholder="入学年限"></el-input>
           </el-form-item>
@@ -141,7 +145,7 @@
         query: {
           fields: [],
           wheres: [
-            { value: 'schoolId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('school')).result.sunwouId },
+             { value: 'eduId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('school')).result.eduId },
             { value: 'isDelete', opertionType: 'equal', opertionValue: false }
           ],
           sorts: [],
@@ -158,6 +162,7 @@
           WIDsubject: '',
           bankCardId: "",
           endTime: "",
+          eduId: JSON.parse(localStorage.getItem('school')).result.eduId
         },
         studentData: {
           sunwouId:'',
@@ -166,7 +171,7 @@
           phone: '',
           goSchoolTime: '',
           classes: '',
-          schoolId: JSON.parse(localStorage.getItem('school')).result.sunwouId
+          eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId
         },
         ruleValidate: {
           WIDtotal_amount: [
@@ -184,6 +189,7 @@
       that.getBankCardList();
       that.getGradeList();
       that.getClassList();
+      that.getSchoolList();
     },
     methods: {
       submitUpdate(){
@@ -255,7 +261,7 @@
       },
       uploadFile(e) {
         var formData = new FormData();
-        formData.append("schoolId", JSON.parse(localStorage.getItem('school')).result.sunwouId);
+        formData.append("eduId", JSON.parse(localStorage.getItem('school')).result.eduId);
         formData.append("file", e.file);
         $.ajax({
           type: "POST",
@@ -347,7 +353,9 @@
         }
         return ids;
       },
-
+      filterTagSchool(value, row) {
+        return row.schoolName === value;
+      },
 
       navTo(path, query, params, target) {
         this.$router.push({
@@ -404,7 +412,7 @@
       getBankCardList() {
         let bankQuery = {
           fields: [],
-          wheres: [{ value: 'schoolId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('school')).result.sunwouId },
+          wheres: [{ value: 'schoolId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('school')).result.eduId },
           { value: 'isDelete', opertionType: 'equal', opertionValue: false }],
           sorts: [],
           pages: {
@@ -433,7 +441,7 @@
           url: sessionStorage.getItem("API") + "payaccount/goSchoolTimeList",
           type: "POST",
           data: {
-            schoolId: JSON.parse(localStorage.getItem('school')).result.sunwouId
+            eduId: JSON.parse(localStorage.getItem('school')).result.eduId
           },
           dataType: "json",
           success(res) {
@@ -455,7 +463,7 @@
           url: sessionStorage.getItem("API") + "payaccount/classesList",
           type: "POST",
           data: {
-            schoolId: JSON.parse(localStorage.getItem('school')).result.sunwouId
+            eduId: JSON.parse(localStorage.getItem('school')).result.eduId
           },
           dataType: "json",
           success(res) {
@@ -472,6 +480,26 @@
           }
         });
       },
+      getSchoolList() {
+       $.ajax({
+          url: sessionStorage.getItem("API") + "payaccount/schoolNameList",
+          type: "POST",
+          data: { eduId: JSON.parse(localStorage.getItem('school')).result.eduId},
+          dataType: "json",
+          success(res) {
+            if (res.code) {
+              let schoolList = [];
+              res.params.list.forEach(function (item, index) {
+                let school = { text: item.schoolName, value: item.schoolName };
+                schoolList.push(school);
+              })
+              that.schoolList = schoolList;
+            } else {
+              that.$Message.error(res.msg);
+            }
+          }
+        });
+      }
     }
   };
 </script>

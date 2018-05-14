@@ -6,12 +6,12 @@
         <div class="panel-start">
           <button class="ui-btn ui-btn-default" @click="multiAddTrans">
             <Icon type="cash" color="green"></Icon>&nbsp;&nbsp;批量缴费</button>
-          <!-- <button class="ui-btn ui-btn-default" @click="multiDel(null,'批量删除')">
+          <button class="ui-btn ui-btn-default" @click="multiDel(null,'批量删除')">
             <Icon type="trash-a" color="#FF3333"></Icon>&nbsp;&nbsp;批量删除</button>
           <el-upload class="upload-demo" :action="ip+'filesystem/upfile'" :http-request="uploadFile" :multiple="false" :show-file-list="false">
-            <el-button size="small" class="uploadbtn" type="primary">
-              <i class="el-icon-upload el-icon--right"></i>Excel导入</el-button>
-          </el-upload> -->
+            <button size="small" class="uploadbtn" type="primary">
+              <i class="el-icon-upload el-icon--right"></i>Excel导入</button>
+          </el-upload>
         </div>
         <div class="panel-end">
           <input type="text" v-model="searchText" class="search-input" placeholder="搜索">
@@ -24,7 +24,7 @@
         <el-table-column prop="name" label="姓名"> </el-table-column>
         <el-table-column prop="idCard" label="身份证号"> </el-table-column>
         <el-table-column prop="phone" label="手机号"> </el-table-column>
-        <el-table-column prop="schoolId" label="学校Id" :filters="schoolList" :filter-method="filterTagSchool" filter-placement="bottom-end">
+        <el-table-column prop="schoolName" label="学校" :filters="schoolList" :filter-method="filterTagSchool" filter-placement="bottom-end">
         </el-table-column>
         <el-table-column prop="goSchoolTime" label="入学年限" :filters="gradeList" :filter-method="filterTagGrade" filter-placement="bottom-end">
         </el-table-column>
@@ -32,9 +32,9 @@
         </el-table-column>
         <el-table-column label="操作" width="120">
           <template slot-scope="scope">
-            <Button @click="transadd(scope.row.idCard)">缴费</Button>
-            <!-- <el-dropdown size="mini" split-button type="default" trigger="click">
-              <div @click="transadd(scope.row.idCard,scope.row.name)">缴费</div>
+            <!-- <Button @click="transadd(scope.row.idCard)">缴费</Button> -->
+            <el-dropdown size="mini" split-button type="default" trigger="click">
+              <div @click="transadd(scope.row.idCard)">缴费</div>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
                   <div style="width:100px;text-align:Center" @click="update(scope.row)">修改</div>
@@ -43,7 +43,7 @@
                   <div style="width:100px;text-align:Center" @click="multiDel(scope.row.sunwouId,'删除')">删除</div>
                 </el-dropdown-item>
               </el-dropdown-menu>
-            </el-dropdown> -->
+            </el-dropdown>
           </template>
         </el-table-column>
       </el-table>
@@ -79,7 +79,7 @@
           </Form>
         </Modal>
       </div>
-      <!-- <div>
+      <div>
         <Modal v-model="updateUserInfo" title="缴费用户信息" @on-ok="submitUpdate" @on-cancel="cancel" ok-text="确定" cancel-text="取消">
           <el-form ref="studentData" :model="studentData" label-width="100px">
             <el-form-item label="姓名">
@@ -91,6 +91,9 @@
             <el-form-item label="手机">
               <el-input v-model="studentData.phone" style="max-width:500px" placeholder="手机"></el-input>
             </el-form-item>
+            <el-form-item label="学校">
+              <el-input v-model="studentData.schoolName" style="max-width:500px" placeholder="学校"></el-input>
+            </el-form-item>
             <el-form-item label="入学年限">
               <el-input v-model="studentData.goSchoolTime" style="max-width:500px" placeholder="入学年限"></el-input>
             </el-form-item>
@@ -99,7 +102,7 @@
             </el-form-item>
           </el-form>
         </Modal>
-      </div> -->
+      </div>
     </div>
 
   </transition>
@@ -146,6 +149,7 @@
         query: {
           fields: [],
           wheres: [
+            { value: 'eduId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('user')).result.sunwouId },
             { value: 'isDelete', opertionType: 'equal', opertionValue: false }
           ],
           sorts: [],
@@ -162,16 +166,18 @@
           WIDsubject: '',
           bankCardId: "",
           endTime: "",
+          eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId
         },
-        // studentData: {
-        //   sunwouId: '',
-        //   name: '',
-        //   idCard: '',
-        //   phone: '',
-        //   goSchoolTime: '',
-        //   classes: '',
-        //   schoolId: JSON.parse(localStorage.getItem('school')).result.sunwouId
-        // },
+        studentData: {
+          sunwouId: '',
+          name: '',
+          idCard: '',
+          phone: '',
+          goSchoolTime: '',
+          classes: '',
+          schoolName: '',
+          eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId
+        },
         ruleValidate: {
           WIDtotal_amount: [
             { required: true, message: '缴费金额不能为空', trigger: 'blur' }
@@ -191,25 +197,51 @@
       that.getSchoolList();
     },
     methods: {
-      // submitUpdate() {
-      //   $.ajax({
-      //     url: sessionStorage.getItem("API") + "payaccount/update",
-      //     type: "POST",
-      //     data: that.studentData,
-      //     dataType: "json",
-      //     success(res) {
-      //       if (res.code) {
-      //         that.getSudentsList();
-      //       } else {
-      //         that.$Message.error(res.msg);
-      //       }
-      //     }
-      //   });
-      // },
-      // update(studentData) {
-      //   $.extend(that.studentData, studentData);
-      //   that.updateUserInfo = true;
-      // },
+      uploadFile(e) {
+        var formData = new FormData();
+        formData.append("eduId", JSON.parse(localStorage.getItem('user')).result.sunwouId);
+        formData.append("file", e.file);
+        $.ajax({
+          type: "POST",
+          url: that.ip + "/payaccount/add",
+          data: formData,
+          processData: false,
+          dataType: 'json',
+          contentType: false,
+          success(res) {
+            if (res.code) {
+              that.getSudentsList();
+              that.$Message.success("上传成功");
+              that.$Notice.info({
+                title: '提示',
+                desc: '成功插入' + res.params.result.success + '条，插入失败' + res.params.result.fail + '条。' + '</br>未成功的身份证号为：</br>' + res.params.result.id.toString().replace(/,/g, '</br>'),
+                duration: 0
+              });
+            } else {
+              that.$Message.error(res.msg);
+            }
+          }
+        });
+      },
+      submitUpdate() {
+        $.ajax({
+          url: sessionStorage.getItem("API") + "payaccount/update",
+          type: "POST",
+          data: that.studentData,
+          dataType: "json",
+          success(res) {
+            if (res.code) {
+              that.getSudentsList();
+            } else {
+              that.$Message.error(res.msg);
+            }
+          }
+        });
+      },
+      update(studentData) {
+        $.extend(that.studentData, studentData);
+        that.updateUserInfo = true;
+      },
       multiAddTrans() {
         if (that.multipleSelection.length > 0) {
           that.transData.payIdCard = that.getIdCards();
@@ -248,6 +280,9 @@
           success(res) {
             if (res.code) {
               that.$Message.success(res.msg);
+              that.$router.push({
+                path: "/educationPaymentPaymentList"
+              });
             } else {
               that.$Message.error(res.msg);
             }
@@ -258,83 +293,57 @@
       cancel() {
         this.$Message.info('Clicked cancel');
       },
-      // uploadFile(e) {
-      //   var formData = new FormData();
-      //   formData.append("schoolId", JSON.parse(localStorage.getItem('school')).result.sunwouId);
-      //   formData.append("file", e.file);
-      //   $.ajax({
-      //     type: "POST",
-      //     url: that.ip + "/payaccount/add",
-      //     data: formData,
-      //     processData: false,
-      //     dataType: 'json',
-      //     contentType: false,
-      //     success(res) {
-      //       if (res.code) {
-      //         that.getSudentsList();
-      //         that.$Message.success("上传成功");
-      //         that.$Notice.info({
-      //           title: '提示',
-      //           desc: '成功插入' + res.params.result.success + '条，插入失败' + res.params.result.fail + '条。' + '</br>未成功的身份证号为：</br>' + res.params.result.id.toString().replace(/,/g, '</br>'),
-      //           duration: 0
-      //         });
-      //       } else {
-      //         that.$Message.error(res.msg);
-      //       }
-      //     }
-      //   });
-      // },
+      
       //批量删除
-      // multiDel(id, name) {
-      //   var ids = null;
-      //   if (this.getIds().length == 0 && id == null) {
-      //     this.$Modal.warning({
-      //       title: "提示",
-      //       content: "未选择要删除的条目！",
-      //       loading: true,
-      //       okText: "确定",
-      //       cancelText: "取消",
-      //       onOk: () => {
-      //         that.$Modal.remove();
-      //       }
-      //     });
-      //   } else {
-      //     if (id != null) {
-      //       ids = id;
-      //     } else {
-      //       ids = this.getIds().toString();
-      //     }
-      //     this.$Modal.confirm({
-      //       title: "警告",
-      //       content: name == '删除' ? "<p>删除后数据将无法恢复，确定要继续吗？</p>" : "<p>这是批量修改操作，确定要继续吗？</p>",
-      //       loading: true,
-      //       okText: "确定",
-      //       cancelText: "取消",
-      //       onOk: () => {
-      //         var data = {
-      //           ids: ids
-      //         }
-      //         data.isDelete = true
-      //         $.ajax({
-      //           url: sessionStorage.getItem("API") + "payaccount/updateMu",
-      //           type: "POST",
-      //           data: data,
-      //           dataType: "json",
-      //           success(res) {
-      //             if (res.code) {
-      //               that.$Modal.remove();
-      //               that.$Message.success(res.msg);
-      //               that.getSudentsList();
-      //             } else {
-      //               that.$Message.error(res.msg);
-      //             }
-      //           }
-      //         });
-      //       }
-      //     });
-      //   }
-
-      // },
+      multiDel(id, name) {
+        var ids = null;
+        if (this.getIds().length == 0 && id == null) {
+          this.$Modal.warning({
+            title: "提示",
+            content: "未选择要删除的条目！",
+            loading: true,
+            okText: "确定",
+            cancelText: "取消",
+            onOk: () => {
+              that.$Modal.remove();
+            }
+          });
+        } else {
+          if (id != null) {
+            ids = id;
+          } else {
+            ids = this.getIds().toString();
+          }
+          this.$Modal.confirm({
+            title: "警告",
+            content: name == '删除' ? "<p>删除后数据将无法恢复，确定要继续吗？</p>" : "<p>这是批量修改操作，确定要继续吗？</p>",
+            loading: true,
+            okText: "确定",
+            cancelText: "取消",
+            onOk: () => {
+              var data = {
+                ids: ids
+              }
+              data.isDelete = true
+              $.ajax({
+                url: sessionStorage.getItem("API") + "payaccount/updateMu",
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success(res) {
+                  if (res.code) {
+                    that.$Modal.remove();
+                    that.$Message.success(res.msg);
+                    that.getSudentsList();
+                  } else {
+                    that.$Message.error(res.msg);
+                  }
+                }
+              });
+            }
+          });
+        }
+      },
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
@@ -381,7 +390,7 @@
         return row.classes === value;
       },
       filterTagSchool(value, row) {
-        return row.schoolId === value;
+        return row.schoolName === value;
       },
       handleSizeChange(val) {
         this.query.pages.size = val;
@@ -440,8 +449,7 @@
         $.ajax({
           url: sessionStorage.getItem("API") + "payaccount/goSchoolTimeList",
           type: "POST",
-          data: {
-          },
+          data: { eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId },
           dataType: "json",
           success(res) {
             if (res.code) {
@@ -461,8 +469,7 @@
         $.ajax({
           url: sessionStorage.getItem("API") + "payaccount/classesList",
           type: "POST",
-          data: {
-          },
+          data: { eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId },
           dataType: "json",
           success(res) {
             if (res.code) {
@@ -479,25 +486,16 @@
         });
       },
        getSchoolList() {
-         let query= {
-           fields: [],
-           wheres: [{ value: 'isDelete', opertionType: 'equal', opertionValue: false }
-
-           ],
-           sorts: [],
-           pages: {
-              }
-         };
         $.ajax({
-          url: sessionStorage.getItem("API") + "schoolaccount/find ",
+          url: sessionStorage.getItem("API") + "payaccount/schoolNameList",
           type: "POST",
-          data: { query: JSON.stringify(query) },
+          data: { eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId },
           dataType: "json",
           success(res) {
             if (res.code) {
                let schoolList = [];
-              res.params.result.forEach(function (item, index) {
-                let school = { text: item.scName, value: item.sunwouId };
+              res.params.list.forEach(function (item, index) {
+                let school = { text: item.schoolName, value: item.schoolName };
                 schoolList.push(school);
               })
               that.schoolList = schoolList;

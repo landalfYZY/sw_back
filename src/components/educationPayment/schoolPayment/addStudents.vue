@@ -11,6 +11,15 @@
         <el-form-item label="手机">
           <el-input v-model="form.phone" style="max-width:500px" placeholder="手机"></el-input>
         </el-form-item>
+        <el-form-item label="学校">
+        <Select v-model="form.schoolName">
+          <Option :value="item.scName" :label="item.scName" v-for="(item,key,index) in schoolList" :key="item.sunwouId">
+            <div class="panel-between">
+              <span>{{item.scName}}</span>
+            </div>
+          </Option>
+        </Select>
+        </el-form-item>
         <el-form-item label="入学年限">
           <el-input v-model="form.goSchoolTime" style="max-width:500px" placeholder="入学年限"></el-input>
         </el-form-item>
@@ -29,18 +38,21 @@
   export default {
     data() {
       return {
+        schoolList:[],
         form: {
           name: '',
           idCard: '',
           phone: '',
           goSchoolTime: '',
           classes: '',
-          schoolId: JSON.parse(localStorage.getItem('school')).result.sunwouId
+          schoolName: '',
+          eduId: JSON.parse(localStorage.getItem('school')).result.eduId
         }
       }
     },
     mounted() {
       that = this;
+      that.getSchoolList();
     },
     methods: {
       onSubmit() {
@@ -55,6 +67,31 @@
               that.$router.push({
                 path: "/educationPaymentSchoolStudentsList"
               });
+            } else {
+              that.$Message.error(res.msg);
+            }
+          }
+        });
+      },
+      getSchoolList() {
+        let query={
+          fields: [],
+          wheres: [
+            { value: 'eduId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('school')).result.eduId },
+            { value: 'isDelete', opertionType: 'equal', opertionValue: false }
+          ],
+          sorts: [],
+          pages: {
+          }
+        }
+        $.ajax({
+          url: sessionStorage.getItem("API") + "schoolaccount/find",
+          type: "POST",
+          data: {query: JSON.stringify(query)},
+          dataType: "json",
+          success(res) {
+            if (res.code) {
+              that.schoolList = res.params.result;
             } else {
               that.$Message.error(res.msg);
             }
