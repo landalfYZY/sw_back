@@ -4,7 +4,7 @@
       <div style="width:100%;height:100vh;background:rgba(0,0,0,0.6)">
         <div style="width:300px;margin:auto;padding-top:100px;text-align:center">
           <div style="font-size:40px;color:#ffffff">校园登录</div>
-          <div style="font-size:16px;color:#ffffff">双沃科技管理系统</div>
+          <div style="font-size:16px;color:#ffffff">大家地理管理系统</div>
           <div style="font-size:14px;color:#ffffff">SUNWOU LOGIN</div>
           <Input style="margin-top:20px" v-model="scAccount" placeholder="学校账号" size="large" />
           <Input style="margin-top:30px" v-model="scKey" type="password" placeholder="密码" size="large" />
@@ -13,7 +13,7 @@
             <div id="captchaBox" style="position:relative;top:-42px;opacity:0"></div>
           </div>
           <div style="width:300px;text-align:left;margin-top:30px">
-            <a style="color:#f3f3f3" href="https://www.sunwou.com" target="blank">双沃科技首页</a>
+            <a style="color:#f3f3f3" href="https://www.sunwou.com" target="blank">大家地理首页</a>
           </div>
         </div>
         <div style="margin:auto;color:#aaa;width:500px;text-align:Center;margin-top:100px">
