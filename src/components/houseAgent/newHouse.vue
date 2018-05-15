@@ -26,7 +26,8 @@
                 <el-table-column prop="config.area" label="建面" > </el-table-column>
                 <el-table-column prop="config.price" label="平均单价" > </el-table-column>
                 <el-table-column prop="config.floorType" label="特色" > </el-table-column>
-                <el-table-column prop="minPrice" label="平均售价（万元）"> </el-table-column>
+                <el-table-column prop="config.status" label="在售状态"> </el-table-column>
+                <el-table-column prop="config.decorate" label="类型"> </el-table-column>                
                 <el-table-column prop="config.huxin.length" label="户型数量"> </el-table-column>
                 <el-table-column label="标签" > 
                   <template slot-scope="scope">

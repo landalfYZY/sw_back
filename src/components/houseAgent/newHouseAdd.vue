@@ -51,18 +51,15 @@
                 <Row>
                     <Col span="7">
                         <CheckboxGroup v-model="formItem.config.tag">
-                            <Checkbox label="商业类"></Checkbox>
-                            <Checkbox label="住宅"></Checkbox>
-                            <Checkbox label="别墅"></Checkbox>
-                            <Checkbox label="写字楼"></Checkbox>
-                            <Checkbox label="代售"></Checkbox>
-                            <Checkbox label="在售"></Checkbox>
+                                    <Checkbox label="无双税"></Checkbox>
+                            <Checkbox label="地铁"></Checkbox>
+                            <Checkbox label="优质"></Checkbox>
                         </CheckboxGroup>
                     </Col>
                     <Col span="2" style="text-align: right;padding-right:10px">在售状态</Col>
                     <Col span="7">
                         <RadioGroup v-model="formItem.config.status">
-                            <Radio label="待售">待售</Radio>
+                            <Radio label="代售">代售</Radio>
                             <Radio label="在售">在售</Radio>
                             <Radio label="停售">停售</Radio>
                         </RadioGroup>
@@ -336,7 +333,8 @@ export default {
           decorate: "",
           province: "浙江省",
           city: "杭州市",
-          areas: ""
+          areas: "",
+          tag:[]
         },
         note: "",
         remark2: "上架",

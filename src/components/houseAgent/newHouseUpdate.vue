@@ -51,18 +51,15 @@
                 <Row>
                     <Col span="7">
                         <CheckboxGroup v-model="formItem.config.tag">
-                            <Checkbox label="商业类"></Checkbox>
-                            <Checkbox label="住宅"></Checkbox>
-                            <Checkbox label="别墅"></Checkbox>
-                            <Checkbox label="写字楼"></Checkbox>
-                            <Checkbox label="代售"></Checkbox>
-                            <Checkbox label="在售"></Checkbox>
+                            <Checkbox label="无双税"></Checkbox>
+                            <Checkbox label="地铁"></Checkbox>
+                            <Checkbox label="优质"></Checkbox>
                         </CheckboxGroup>
                     </Col>
                     <Col span="2" style="text-align: right;padding-right:10px">在售状态</Col>
                     <Col span="7">
                         <RadioGroup v-model="formItem.config.status">
-                            <Radio label="待售">待售</Radio>
+                            <Radio label="代售">代售</Radio>
                             <Radio label="在售">在售</Radio>
                             <Radio label="停售">停售</Radio>
                         </RadioGroup>
@@ -306,7 +303,7 @@ export default {
       loading: false,
       tempModal: "cover",
       swGalleryModal: false,
-      status: ["待售", "在售", "停售"],
+      status: ["代售", "在售", "停售"],
       decorates: ["住宅", "别墅", "写字楼", "商铺", "底商"],
       floorTypes: ["五证齐全", "低密度", "品牌房企", "车位充足"],
       orientations: ["朝南", "朝北", "朝东", "朝西", "南北"],
@@ -317,7 +314,7 @@ export default {
         minPrice: "",
         company: "万元",
         images: [],
-        configs: {
+        config: {
           name: "",
           phone: "",
           province: "",
@@ -336,7 +333,8 @@ export default {
           idcard: "",
           huxin: [],
           floorType: "",
-          decorate: ""
+          decorate: "",
+          tag:[]
         },
         note: "",
         remark2: "上架",
@@ -402,6 +400,11 @@ export default {
               res.params.result[0].config.huxin
             );
             that.formItem = res.params.result[0];
+            if(res.params.result[0].config.tag){
+                that.formItem.config.tag = JSON.parse(res.params.result[0].config.tag)
+            }else{
+                that.formItem.config.tag = []
+            }
             that.cityList = pos.getCity(that.formItem.config.province);
             that.areaList = pos.getArea(that.formItem.config.city);
           } else {
