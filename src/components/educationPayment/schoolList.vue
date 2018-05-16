@@ -74,7 +74,8 @@ export default {
               scAdminName: '',
               scAdminPhone: '',
               scConfig: '',
-              sunwouId:''
+              sunwouId:'',
+              eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId
           },
           list:[],
           total:0,

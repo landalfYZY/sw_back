@@ -4,15 +4,15 @@
 
       <div class="panel-between">
         <div class="panel-start">
-          <button class="ui-btn ui-btn-default" @click="addBankCard()">
+          <!-- <button class="ui-btn ui-btn-default" @click="addBankCard()">
             <Icon type="plus-round" color="green"></Icon>
-            </Icon>&nbsp;&nbsp;添加</button>
+            </Icon>&nbsp;&nbsp;添加</button> -->
           <!-- <button class="ui-btn ui-btn-default" @click="multiDel(null,'批量删除')">
             <Icon type="trash-a" color="#FF3333"></Icon>&nbsp;&nbsp;批量删除</button> -->
         </div>
         <div class="panel-end">
-          <input type="text" v-model="searchText" class="search-input" placeholder="搜索" @input="pubSearch()">
-          <button class="ui-btn ui-btn-default">&nbsp;&nbsp;
+          <input type="text" v-model="searchText" class="search-input" placeholder="搜索" >
+          <button class="ui-btn ui-btn-default" @click="pubSearch">&nbsp;&nbsp;
             <Icon type="ios-search" color="#0099ff"></Icon>&nbsp;&nbsp;</button>
         </div>
       </div>
@@ -22,7 +22,7 @@
         <el-table-column prop="number" label="账户"> </el-table-column>
         <el-table-column prop="registName" label="户主"> </el-table-column>
         <el-table-column prop="remake" label="备注"> </el-table-column>
-        <el-table-column label="操作" width="120">
+        <!-- <el-table-column label="操作" width="120">
           <template slot-scope="scope">
             <el-dropdown size="mini" split-button type="default" trigger="click">
               <div @click="updateBankCard(scope.row)">修改</div>
@@ -33,14 +33,14 @@
               </el-dropdown-menu>
             </el-dropdown>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <el-pagination style="float:right;margin-top:30px" @size-change="handleSizeChange" @current-change="handleCurrentChange"
         :current-page="query.pages.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="query.pages.size" layout="total, sizes, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
       <div class="clearfix"></div>
-      <div>
+      <!-- <div>
         <Modal v-model="modal" title="银行卡信息" @on-ok="ok" @on-cancel="cancel">
           <Form :label-width="80" :rules="ruleValidate" :model="bankData">
             <FormItem label="银行名称">
@@ -57,7 +57,7 @@
             </FormItem>
           </Form>
         </Modal>
-      </div>
+      </div> -->
     </div>
 
   </transition>
@@ -93,7 +93,8 @@
         okType: 'add',
         query: {
           fields: [],
-          wheres: [{ value: 'schoolId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('school')).result.sunwouId },
+          wheres: [
+            { value: 'schoolId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('school')).result.eduId },
           { value: 'isDelete', opertionType: 'equal', opertionValue: false }
           ],
           sorts: [],
@@ -244,12 +245,12 @@
       pubSearch() {
         if (this.query.wheres.length == 2) {
           this.query.wheres.push({
-            value: "title",
+            value: "registName",
             opertionType: "like",
-            opertionValue: this.pubSearchText
+            opertionValue: this.searchText
           });
         } else {
-          this.query.wheres[2].opertionValue = this.pubSearchText;
+          this.query.wheres[2].opertionValue = this.searchText;
         }
         this.getBankCardList();
       },

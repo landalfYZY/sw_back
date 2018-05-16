@@ -32,6 +32,7 @@
             {{scope.row.factAmount==''?0:scope.row.factAmount}}
           </template>
         </el-table-column>
+        <el-table-column prop="payItemCompany" label="发起单位"> </el-table-column>
         <el-table-column label="是否提现" prop="isToBank" :filters="[{text:'已提现',value:true},{text:'未提现',value:false}]" :filter-method="filterTagIsToBank"
           filter-placement="bottom-end">
           <template slot-scope="scope">
@@ -107,7 +108,7 @@
         query: {
           fields: [],
           wheres: [
-            { value: 'schoolId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('user')).result.sunwouId },
+             { value: 'eduId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('user')).result.sunwouId },
             { value: 'isDelete', opertionType: 'equal', opertionValue: false }
           ],
           sorts: [],
