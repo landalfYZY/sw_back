@@ -386,6 +386,7 @@ export default {
         data: formData,
         processData: false,
         contentType: false,
+        async: false,
         complete(res) {
           var rl = JSON.parse(res.responseText);
           if (rl.code) {

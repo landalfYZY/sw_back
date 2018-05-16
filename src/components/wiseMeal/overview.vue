@@ -6,9 +6,9 @@
                   <div class="panel-center item-center">
                       <div style="text-align:Center">
                           <div><Icon type="university" size="30" color="#66CC99"></Icon></div>
-                          <div>新会员</div>
+                          <div>新用户</div>
                       </div>
-                      <div style="font-size:35px;margin-left:20px;line-height:60px">20</div>
+                      <div style="font-size:35px;margin-left:20px;line-height:60px">{{membersTotal}}</div>
                   </div>
               </Col>
               <Col  :span="6" style="padding:10px;background:#f3f3f3">
@@ -17,7 +17,7 @@
                           <div><Icon type="ios-bookmarks" color="#0099ff" size="30"></Icon></div>
                           <div>日活量</div>
                       </div>
-                      <div style="font-size:35px;margin-left:20px;line-height:60px">196</div>
+                      <div style="font-size:35px;margin-left:20px;line-height:60px">12</div>
                   </div>
               </Col>
               <Col  :span="6" style="padding:10px;background:#f3f3f3">
@@ -26,7 +26,7 @@
                           <div><Icon type="filing" color="#0099ff" size="30"></Icon></div>
                           <div>昨日订单</div>
                       </div>
-                      <div style="font-size:35px;margin-left:20px;line-height:60px">352</div>
+                      <div style="font-size:35px;margin-left:20px;line-height:60px">{{orderTotal}}</div>
                   </div>
               </Col>
               <Col  :span="6" style="padding:10px;background:#f3f3f3;height:80px">
@@ -81,6 +81,9 @@ import { View } from "@antv/data-set";
 export default {
   data() {
     return {
+      date: "",
+      membersTotal: 0,
+      orderTotal:0,
       cityList: [
         {
           value: "New York",
@@ -111,12 +114,141 @@ export default {
     };
   },
   mounted() {
+    this.formatDate();
+    this.getMembers();
+    this.getOrdersNums();
     this.getCharts();
     this.getCharts1();
     this.getCharts2();
     this.getCharts3();
   },
   methods: {
+    formatDate() {
+      Date.prototype.Format = function(fmt) {
+        //author: meizz
+        var o = {
+          "M+": this.getMonth() + 1, //月份
+          "d+": this.getDate()-1, //日
+          "h+": this.getHours(), //小时
+          "m+": this.getMinutes(), //分
+          "s+": this.getSeconds(), //秒
+          "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+          S: this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt))
+          fmt = fmt.replace(
+            RegExp.$1,
+            (this.getFullYear() + "").substr(4 - RegExp.$1.length)
+          );
+        for (var k in o)
+          if (new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(
+              RegExp.$1,
+              RegExp.$1.length == 1
+                ? o[k]
+                : ("00" + o[k]).substr(("" + o[k]).length)
+            );
+        return fmt;
+      };
+      this.date = new Date().Format("yyyy-MM-dd");
+    },
+    //获取昨日新用户
+    getMembers() {
+      var that = this;
+      $.ajax({
+        url: sessionStorage.getItem("API") + "wxuser/find",
+        type: "POST",
+        data: {
+          query: JSON.stringify({
+            fields: [],
+            wheres: [
+              {
+                value: "minProgramId",
+                opertionType: "equal",
+                opertionValue: localStorage.getItem("miniId")
+              },
+              {
+                value: "isDelete",
+                opertionType: "equal",
+                opertionValue: false
+              },
+              {
+                value: "createDate",
+                opertionType: "equal",
+                opertionValue: this.date
+              }
+            ],
+            sorts: [],
+            pages: {
+              currentPage: 1,
+              size: 0
+            }
+          })
+        },
+        dataType: "json",
+        success(res) {
+          if (res.code) {
+            that.membersTotal = res.params.total;
+          } else {
+            that.$Message.error(res.msg);
+          }
+        }
+      });
+    },
+    //获取昨日订单
+    getOrdersNums() {
+      var that = this;
+      $.ajax({
+        url: sessionStorage.getItem("API") + "takeoutorder/find",
+        type: "POST",
+        data: {
+          query: JSON.stringify({
+            fields: [],
+            wheres: [
+              {
+                value: "appid",
+                opertionType: "equal",
+                opertionValue: localStorage.getItem("miniId")
+              },
+
+              {
+                value: "isDelete",
+                opertionType: "equal",
+                opertionValue: false
+              },
+              {
+                value: "type",
+                opertionType: "ne",
+                opertionValue: "充值"
+              },
+              {
+                value: "status",
+                opertionType: "ne",
+                opertionValue: "待付款"
+              },
+              {
+                value: "createDate",
+                opertionType: "equal",
+                opertionValue: this.date
+              }
+            ],
+            sorts: [],
+            pages: {
+              currentPage: 1,
+              size: 0
+            }
+          })
+        },
+        dataType: "json",
+        success(res) {
+          if (res.code) {
+            that.orderTotal = res.params.total;
+          } else {
+            that.$Message.error(res.msg);
+          }
+        }
+      });
+    },
     getCharts() {
       const data = [
         { year: "1991", value: 3 },

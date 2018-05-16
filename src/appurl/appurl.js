@@ -189,6 +189,15 @@ var wiseMeal = [{
     ]
   },
   {
+    label: '广告管理',
+    icon: '',
+    children: [{
+        label: '广告图管理',
+        path: '/wiseMealCarousel'
+      }
+    ]
+  },
+  {
     label: '店铺管理',
     icon: '',
     children: [{
@@ -215,12 +224,18 @@ var wiseMeal = [{
     ]
   },
   {
-    label: '商品管理',
+    label: '类目管理',
     icon: '',
     children: [{
         label: '商品类目',
         path: '/wiseMealCategory'
-      }, {
+      }
+    ]
+  },
+  {
+    label: '商品管理',
+    icon: '',
+    children: [{
         label: '商品列表',
         path: '/wiseMealgoodsList'
       },

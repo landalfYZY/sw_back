@@ -69,6 +69,7 @@ import wiseMealGoodsAdd from '../components/wiseMeal/goodsAdd'
 import wiseMealGoodsUpdate from '../components/wiseMeal/goodsUpdate'
 import wiseMealRecharge from '../components/wiseMeal/recharge'
 import wiseMealOrderlist from '../components/wiseMeal/orderlist'
+import wiseMealCarousel from '../components/wiseMeal/carousel'
 /**
  * 预定代购
  */
@@ -128,6 +129,7 @@ export default new Router({
       { path:'/wiseMealGoodsAdd',name:'新增商品',component:wiseMealGoodsAdd},
       { path:'/wiseMealGoodsUpdate',name:'修改商品',component:wiseMealGoodsUpdate},
       { path:'/wiseMealOrderlist',name:'订单列表',component:wiseMealOrderlist},
+      { path:'/wiseMealCarousel',name:'广告图管理',component:wiseMealCarousel},
       //预定代购
       { path:'/bookingAndPurchaseOverview',name:'修改商品',component:bookingAndPurchaseOverview},
       { path:'/bookingAndPurchaseCategory',name:'类目列表',component:bookingAndPurchaseCategory},
