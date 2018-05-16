@@ -2,11 +2,7 @@
   <transition name="fade" mode="out-in">
       <div>
           <Form :model="formItem"  label-position="top">
-            <FormItem label="地区">
-                <Select v-model="shop" style="width:300px;" placeholder="请选择一个地区" @on-change="changeShop()">
-                    <Option v-for="item in shopList" :value="item.sunwouId" :key="item.sunwouId">{{ item.name }}</Option>
-                </Select>
-            </FormItem>
+            
             <FormItem label="类目">
                 <Select v-model="cate" style="width:300px;" placeholder="请选择一个类目" >
                     <Option v-for="item in cateList" :value="item.sunwouId" :key="item.sunwouId">{{ item.name }}</Option>
@@ -272,7 +268,7 @@ export default {
     }
   },
   mounted() {
-    this.getShopList();
+    this.getCate();
     if (this.$route.query.id) {
       this.shop = this.$route.query.id;
     }
@@ -378,48 +374,6 @@ export default {
       if (this.shop != "") {
         this.getCate();
       }
-    },
-    getShopList() {
-      var that = this;
-      $.ajax({
-        url: sessionStorage.getItem("API") + "productcategory/find",
-        type: "POST",
-        data: {
-          query: JSON.stringify({
-            fields: ["name"],
-            wheres: [
-              {
-                value: "appid",
-                opertionType: "equal",
-                opertionValue: localStorage.getItem("miniId")
-              },
-              {
-                value: "type",
-                opertionType: "equal",
-                opertionValue: "country"
-              },
-              {
-                value: "isDelete",
-                opertionType: "equal",
-                opertionValue: false
-              }
-            ],
-            sorts: [],
-            pages: {
-              currentPage: 1,
-              size: 100
-            }
-          })
-        },
-        dataType: "json",
-        success(res) {
-          if (res.code) {
-            that.shopList = res.params.list;
-          } else {
-            that.$Message.error(res.msg);
-          }
-        }
-      });
     },
     submitForm() {
       this.formItem.tempId = this.shop;

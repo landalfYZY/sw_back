@@ -287,12 +287,9 @@ var bookingAndPurchase = [
     ]
   },
   {
-    label: '地区与类目',
+    label: '类目管理',
     icon: '',
-    children: [{
-        label: '地区列表',
-        path: '/bookingAndPurchaseCountry'
-      },
+    children: [
       {
         label: '类目列表',
         path: '/bookingAndPurchaseCategory'
