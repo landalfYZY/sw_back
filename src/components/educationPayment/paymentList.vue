@@ -16,29 +16,36 @@
             <Icon type="ios-search" color="#0099ff"></Icon>&nbsp;&nbsp;</button>
         </div>
       </div>
-      <el-table style="margin-top:15px;width: 100%" :data="list" >
+      <el-table style="margin-top:15px;width: 100%" :data="list" @filter-change="filterChange">
+        <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="payAccountName" label="姓名"> </el-table-column>
         <el-table-column prop="payIdCard" label="身份证"> </el-table-column>
-        <el-table-column prop="subject" label="缴费项" :filters="payItemList" :filter-method="filterTagPayItem" filter-placement="bottom-end">
+        <el-table-column prop="subject" label="缴费项" :filters="payItemList" :filter-method="filterTagPayItem" filter-placement="bottom-end"
+          column-key="payItemId">
         </el-table-column>
-        <el-table-column prop="payItemCompany" label="发起单位" :filters="payItemCompanyList" :filter-method="filterTagPayItemCompany" filter-placement="bottom-end">
+        <el-table-column prop="payItemCompany" label="发起单位" :filters="payItemCompanyList" :filter-method="filterTagPayItemCompany"
+          filter-placement="bottom-end" column-key="payItemCompany">
         </el-table-column>
-        <el-table-column prop="schoolName" label="学校" :filters="schoolList" :filter-method="filterTagSchool" filter-placement="bottom-end">
+        <el-table-column prop="schoolName" label="学校" :filters="schoolList" :filter-method="filterTagSchool" filter-placement="bottom-end"
+          column-key="schoolName">
         </el-table-column>
-        <el-table-column prop="goSchoolTime" label="入学年限" :filters="gradeList" :filter-method="filterTagGrade" filter-placement="bottom-end">
+        <el-table-column prop="goSchoolTime" label="入学年限" :filters="gradeList" :filter-method="filterTagGrade" filter-placement="bottom-end"
+          column-key="goSchoolTime">
         </el-table-column>
-        <el-table-column prop="classes" label="班级" :filters="classList" :filter-method="filterTagClass" filter-placement="bottom-end">
+        <el-table-column prop="classes" label="班级" :filters="classList" :filter-method="filterTagClass" filter-placement="bottom-end"
+          column-key="classes">
         </el-table-column>
         <el-table-column prop="total_amount" label="金额"> </el-table-column>
-        <el-table-column label="是否缴费" prop="trade_status" :filters="[{text:'已缴费',value:'EDU_SUCCESS'},{text:'未缴费',value:'waitPay'}]" :filter-method="filterTagPay" filter-placement="bottom-end">
+        <el-table-column label="是否缴费" prop="trade_status" :filters="[{text:'已缴费',value:'EDU_SUCCESS'},{text:'未缴费',value:'waitPay'}]"
+          :filter-method="filterTagPay" filter-placement="bottom-end" column-key="trade_status">
           <template slot-scope="scope">
             <Icon type="checkmark-round" v-if="scope.row.trade_status=='EDU_SUCCESS'" color="green"></Icon>
             <Icon type="close-round" v-if="scope.row.trade_status!='EDU_SUCCESS'" color="red"></Icon>
           </template>
         </el-table-column>
-        <el-table-column prop="refund_fee1" label="退款"> 
+        <el-table-column prop="refund_fee1" label="退款">
           <template slot-scope="scope">
-             {{scope.row.refund_fee1?scope.row.refund_fee1:0}}
+            {{scope.row.refund_fee1?scope.row.refund_fee1:0}}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="120">
@@ -59,19 +66,19 @@
         </el-table-column>
       </el-table>
       <el-pagination style="float:right;margin-top:30px" @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :current-page="query.pages.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="query.pages.size" layout="total, sizes, prev, pager, next, jumper"
+        :current-page="query.pages.currentPage" :page-sizes="[20, 500, 1000, 5000]" :page-size="query.pages.size" layout="total, sizes, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
       <div class="clearfix"></div>
-<div>
-  <Modal v-model="returnModal" title="缴费用户信息" @on-ok="submitReturn" @on-cancel="cancel" ok-text="确定" cancel-text="取消">
-    <el-form ref="payModal" :model="returnPay" label-width="100px">
-      <el-form-item label="退款金额">
-        <el-input-number v-model="returnPay.refund_fee1" :min="0" :max="returnPay.max" label="描述文字"></el-input-number>
-      </el-form-item>
-    </el-form>
-  </Modal>
-</div>
+      <div>
+        <Modal v-model="returnModal" title="缴费用户信息" @on-ok="submitReturn" @on-cancel="cancel" ok-text="确定" cancel-text="取消">
+          <el-form ref="payModal" :model="returnPay" label-width="100px">
+            <el-form-item label="退款金额">
+              <el-input-number v-model="returnPay.refund_fee1" :min="0" :max="returnPay.max" label="描述文字"></el-input-number>
+            </el-form-item>
+          </el-form>
+        </Modal>
+      </div>
     </div>
 
   </transition>
@@ -113,34 +120,34 @@
         payItemList: [],
         gradeList: [],
         classList: [],
-        returnModal:false,
-        returnPay:{
-          appid:'wx52824aa6f56489e9',
-          appSecret:'73bf828a7cb0257fab919a9f580b6a3e',
-          merchantNumber:'1503604781',
-          merchantSecret:'LHJYMRYQCCNMBTHZSWWLKJYXGS717SUN',
-          sunwouId:'',
-          refund_fee1:0,
-          max:0
+        returnModal: false,
+        returnPay: {
+          appid: 'wx52824aa6f56489e9',
+          appSecret: '73bf828a7cb0257fab919a9f580b6a3e',
+          merchantNumber: '1503604781',
+          merchantSecret: 'LHJYMRYQCCNMBTHZSWWLKJYXGS717SUN',
+          sunwouId: '',
+          refund_fee1: 0,
+          max: 0
         },
         schoolList: [],
-        payItemCompanyList:[{ text: '教育局', value: '教育局' }],
+        payItemCompanyList: [{ text: '教育局', value: '教育局' }],
         query: {
           fields: [],
           wheres: [
             { value: 'eduId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('user')).result.sunwouId },
             { value: 'isDelete', opertionType: 'equal', opertionValue: false },
-             //{ value: 'payItemCompany', opertionType: 'equal', opertionValue: '' },
-            // { value: 'eduId', opertionType: 'equal', opertionValue: undefined },
-            // { value: 'eduId', opertionType: 'equal', opertionValue: undefined },
-            // { value: 'eduId', opertionType: 'equal', opertionValue: undefined },
-            // { value: 'eduId', opertionType: 'equal', opertionValue: undefined },
-            // { value: 'eduId', opertionType: 'equal', opertionValue: undefined }
+            { value: 'payItemCompany', opertionType: 'like', opertionValue: '' },
+            { value: 'payItemId', opertionType: 'like', opertionValue: "" },
+            { value: 'classes', opertionType: 'like', opertionValue: '' },
+            { value: 'goSchoolTime', opertionType: 'like', opertionValue: '' },
+            { value: 'schoolName', opertionType: 'like', opertionValue: '' },
+            { value: 'trade_status', opertionType: 'like', opertionValue: '' }
           ],
           sorts: [],
           pages: {
             currentPage: 1,
-            size: 10
+            size: 20
           }
         },
         transData: {
@@ -168,15 +175,52 @@
       that.getGradeList();
       that.getClassList();
       that.getSchoolList();
+      that.getrealSchoolList();
     },
     methods: {
-      putOut(){
-
+      changeFilterQuery(conditions,num){
+        if (conditions[1] != undefined) {
+          that.query.wheres[num].opertionType='regex';
+          let opertionValue='';
+          for(let i=0;i<conditions.length;i++){
+            opertionValue = opertionValue + conditions[i] + '|';
+          }
+          opertionValue=opertionValue.substr(0, opertionValue.length - 1);
+          that.query.wheres[num].opertionValue= opertionValue;
+        } else if (conditions[0] != undefined) {
+          that.query.wheres[num].opertionType = 'equal';
+          that.query.wheres[num].opertionValue = conditions[0];
+        } else {
+          that.query.wheres[num].opertionType = 'like';
+          that.query.wheres[num].opertionValue = '';
+        }
       },
-      returnFee(payment){
-        that.returnPay.sunwouId= payment.sunwouId;
-        that.returnPay.max= payment.total_amount;
-        that.returnModal=true;
+      filterChange(filters) {
+        if (filters.payItemId != undefined) {
+          that.changeFilterQuery(filters.payItemId,3);
+        } else if (filters.payItemCompany != undefined) {
+          that.changeFilterQuery(filters.payItemCompany, 2);
+        } else if (filters.classes != undefined) {
+          that.changeFilterQuery(filters.classes, 4);
+        } else if (filters.goSchoolTime != undefined) {
+          that.changeFilterQuery(filters.goSchoolTime, 5);
+        } else if (filters.schoolName != undefined) {
+          that.changeFilterQuery(filters.schoolName, 6);
+        } else if (filters.trade_status != undefined) {
+          that.changeFilterQuery(filters.trade_status, 7);
+        }
+        that.getPaymentList();
+      },
+      putOut() {
+        console.info(JSON.stringify(that.query))
+        let sb = JSON.stringify(that.query).replace(/\"/g, "%22").replace(/\{/g, "%7b").replace(/\}/g, "%7d");
+        console.info(sb)
+        window.open(sessionStorage.getItem("API") + "trans/outExcel?query=" + sb)
+      },
+      returnFee(payment) {
+        that.returnPay.sunwouId = payment.sunwouId;
+        that.returnPay.max = payment.total_amount*1;
+        that.returnModal = true;
       },
       submitReturn() {
         $.ajax({
@@ -196,24 +240,23 @@
       cancel() {
         this.$Message.info('Clicked cancel');
       },
- 
+
       search() {
-        if (this.query.wheres.length == 2) {
+        if (this.query.wheres.length == 8) {
           this.query.wheres.push({
             value: "payAccountName",
             opertionType: "like",
             opertionValue: this.searchText
           });
         } else {
-          this.query.wheres[2].opertionValue = this.searchText;
+          this.query.wheres[8].opertionValue = this.searchText;
         }
         this.getPaymentList();
       },
       filterTagPay(value, row) {
-        console.info(value)
-        if(value=='EDU_SUCCESS'){
+        if (value == 'EDU_SUCCESS') {
           return row.trade_status === value;
-        }else{
+        } else {
           return row.trade_status != 'EDU_SUCCESS';
         }
       },
@@ -229,7 +272,7 @@
       filterTagSchool(value, row) {
         return row.schoolName === value;
       },
-      filterTagPayItemCompany(value, row){
+      filterTagPayItemCompany(value, row) {
         return row.payItemCompany === value;
       },
       handleSizeChange(val) {
@@ -266,7 +309,7 @@
           ],
           sorts: [],
           pages: {
-            
+
           }
         };
         $.ajax({
@@ -334,7 +377,7 @@
         $.ajax({
           url: sessionStorage.getItem("API") + "payaccount/schoolNameList",
           type: "POST",
-          data: {eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId},
+          data: { eduId: JSON.parse(localStorage.getItem('user')).result.sunwouId },
           dataType: "json",
           success(res) {
             if (res.code) {
@@ -344,8 +387,35 @@
                 schoolList.push(school);
               })
               that.schoolList = schoolList;
-              that.payItemCompanyList=that.payItemCompanyList.concat(schoolList)
-              
+
+            } else {
+              that.$Message.error(res.msg);
+            }
+          }
+        });
+      },
+      getrealSchoolList() {
+        let query = {
+          fields: [],
+          wheres: [
+            { value: 'eduId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('school')).result.eduId },
+            { value: 'isDelete', opertionType: 'equal', opertionValue: false }
+          ],
+          sorts: [],
+          pages: {
+          }
+        }
+        $.ajax({
+          url: sessionStorage.getItem("API") + "schoolaccount/find",
+          type: "POST",
+          data: { query: JSON.stringify(query) },
+          dataType: "json",
+          success(res) {
+            if (res.code) {
+              res.params.result.forEach(function (item, index) {
+                let payItemCompany = { text: item.scName, value: item.scName };
+                that.payItemCompanyList.push(payItemCompany)
+              });
             } else {
               that.$Message.error(res.msg);
             }

@@ -126,7 +126,7 @@
                             },
                             {
                                 label: "添加学生缴费",
-                                path: "/educationPaymentSchoolPaymentAdd"
+                                path: "/educationPaymentSchoolStudentsList"
                             },
                             {
                                 label: "缴费项列表",

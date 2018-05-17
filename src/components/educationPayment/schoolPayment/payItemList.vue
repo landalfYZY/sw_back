@@ -6,8 +6,8 @@
         <div class="panel-start">
           <!-- <button class="ui-btn ui-btn-default" @click="multiAddTrans">
             <Icon type="cash" color="green"></Icon>&nbsp;&nbsp;缴费</button> -->
-          <button class="ui-btn ui-btn-default" @click="multiDel(null,'删除')">
-            <Icon type="trash-a" color="#FF3333"></Icon>&nbsp;&nbsp;批量删除</button>
+          <!-- <button class="ui-btn ui-btn-default" @click="multiDel(null,'删除')">
+            <Icon type="trash-a" color="#FF3333"></Icon>&nbsp;&nbsp;批量删除</button> -->
 
         </div>
         <div class="panel-end">
@@ -16,8 +16,8 @@
             <Icon type="ios-search" color="#0099ff"></Icon>&nbsp;&nbsp;</button>
         </div>
       </div>
-      <el-table style="margin-top:15px;width: 100%" :data="payItemList" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55"></el-table-column>
+      <el-table style="margin-top:15px;width: 100%" :data="payItemList" >
+        <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="payItem" label="名称"> </el-table-column>
         <el-table-column prop="allPayNumber" label="应缴人数"> </el-table-column>
         <el-table-column prop="allAmount" label="应缴总金额">
@@ -56,7 +56,7 @@
         </el-table-column> -->
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" @click="onSubmit" size="small" :disabled="scope.row.isToBank">提现</el-button>
+            <el-button type="primary" @click="toBank" size="small" :disabled="scope.row.isToBank">提现</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -139,40 +139,13 @@
       that.getPayItemList();
     },
     methods: {
-      multiAddTrans() {
-        that.transData.payIdCard = that.multipleSelection;
-        that.modal = true;
-      },
-      handleChange(date) {
-        console.info(date)
-        that.transData.endTime = date;
-      },
-      transadd(idCard) {
-        that.transData.payIdCard = [idCard];
-        that.modal = true;
-      },
-      ok() {
-        let transData = {}
-        $.extend(transData, that.transData);
-        transData.payIdCard = transData.payIdCard.toString();
-        $.ajax({
-          url: sessionStorage.getItem("API") + "trans/add",
-          type: "POST",
-          data: transData,
-          dataType: "json",
-          success(res) {
-            if (res.code) {
-              that.$Message.success(res.msg);
-            } else {
-              that.$Message.error(res.msg);
-            }
-          }
+      toBank() {
+        that.$Modal.warning({
+          title: '提示',
+          content: '此功能暂时不适用！！'
         });
-        this.$Message.info('Clicked ok');
       },
-      cancel() {
-        this.$Message.info('Clicked cancel');
-      },
+      
       uploadFile(e) {
         var formData = new FormData();
         formData.append("schoolId", localStorage.getItem("userId"));
@@ -193,68 +166,7 @@
           }
         });
       },
-      //批量删除
-      multiDel(id, name) {
-        var ids = null;
-        if (this.getIds().length == 0) {
-          ids = id;
-        } else {
-          ids = this.getIds().toString();
-        }
-        var that = this;
-        this.$Modal.confirm({
-          title: "警告",
-          content: name == '删除' ? "<p>删除后数据将无法恢复，确定要继续吗？</p>" : "<p>这是批量修改操作，确定要继续吗？</p>",
-          loading: true,
-          okText: "确定",
-          cancelText: "取消",
-          onOk: () => {
-            var ui = this;
-            var data = {
-              sunwouId: ids
-            }
-            if (name == '删除') {
-              data.isDelete = true
-            } else {
-              data.remark2 = name
-            }
-            $.ajax({
-              url: sessionStorage.getItem("API") + "exh/update",
-              type: "POST",
-              data: data,
-              dataType: "json",
-              success(res) {
-                if (res.code) {
-                  ui.$Modal.remove();
-                  that.$Message.success(res.msg);
-                  that.getPayItemList();
-                } else {
-                  that.$Message.error(res.msg);
-                }
-              }
-            });
-          }
-        });
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      getIds() {
-        var ids = [];
-        for (var i in this.multipleSelection) {
-          ids.push(this.multipleSelection[i].sunwouId);
-        }
-        return ids;
-      },
-
-      navTo(path, query, params, target) {
-        this.$router.push({
-          path: path,
-          query: query,
-          params: params,
-          target: target
-        });
-      },
+      
       search() {
         if (this.query.wheres.length == 2) {
           this.query.wheres.push({

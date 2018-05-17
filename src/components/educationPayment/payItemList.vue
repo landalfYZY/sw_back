@@ -17,7 +17,7 @@
         </div>
       </div>
       <el-table style="margin-top:15px;width: 100%" :data="payItemList" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="payItem" label="名称"> </el-table-column>
         <el-table-column prop="allPayNumber" label="应缴人数"> </el-table-column>
         <el-table-column prop="allAmount" label="应缴总金额">
@@ -57,7 +57,7 @@
         </el-table-column> -->
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" @click="onSubmit" size="small" :disabled="scope.row.isToBank">提现</el-button>
+            <el-button type="primary" @click="toBank" size="small" :disabled="scope.row.isToBank">提现</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -140,6 +140,12 @@
       that.getPayItemList();
     },
     methods: {
+      toBank(){
+        that.$Modal.warning({
+          title: '提示',
+          content: '此功能暂时不适用！！'
+        });
+      },
       multiAddTrans() {
         that.transData.payIdCard = that.multipleSelection;
         that.modal = true;

@@ -3,7 +3,6 @@
       <div>
           <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%"
             @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55"> </el-table-column>
             <el-table-column label="学校" prop="scName"> </el-table-column>
             <el-table-column label="地址" prop="scAddress"> </el-table-column>
             <el-table-column label="管理员" prop="scAdminName"> </el-table-column>

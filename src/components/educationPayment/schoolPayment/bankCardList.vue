@@ -17,7 +17,7 @@
         </div>
       </div>
       <el-table style="margin-top:15px;width: 100%" :data="list" @selection-change="handleSelectionChange">
-        <el-table-column type="selection"></el-table-column>
+        <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="bankName" label="银行"> </el-table-column>
         <el-table-column prop="number" label="账户"> </el-table-column>
         <el-table-column prop="registName" label="户主"> </el-table-column>

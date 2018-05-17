@@ -8,9 +8,9 @@
         <el-form-item label="身份证号">
           <el-input v-model="form.idCard" style="max-width:500px" placeholder="身份证号"></el-input>
         </el-form-item>
-        <el-form-item label="手机">
+        <!-- <el-form-item label="手机">
           <el-input v-model="form.phone" style="max-width:500px" placeholder="手机"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="学校">
         <Select v-model="form.schoolName">
           <Option :value="item.scName" :label="item.scName" v-for="(item,key,index) in schoolList" :key="item.sunwouId">

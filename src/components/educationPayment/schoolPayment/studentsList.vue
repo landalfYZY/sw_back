@@ -20,10 +20,12 @@
         </div>
       </div>
       <el-table style="margin-top:15px;width: 100%" :data="list" @selection-change="handleSelectionChange">
+        
         <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column type="index" width="50">
+        </el-table-column>
         <el-table-column prop="name" label="姓名"> </el-table-column>
         <el-table-column prop="idCard" label="身份证号"> </el-table-column>
-        <el-table-column prop="phone" label="手机号"> </el-table-column>
         <el-table-column prop="schoolName" label="学校" :filters="schoolList" :filter-method="filterTagSchool" filter-placement="bottom-end">
         </el-table-column>
         <el-table-column prop="goSchoolTime" label="入学年限" :filters="gradeList" :filter-method="filterTagGrade" filter-placement="bottom-end">

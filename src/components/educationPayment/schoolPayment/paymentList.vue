@@ -8,27 +8,31 @@
             <Icon type="ios-cloud-download" color="green"></Icon>&nbsp;&nbsp;导出Excel</button>
           <!-- <button class="ui-btn ui-btn-default" @click="multiDel(null,'删除')">
             <Icon type="trash-a" color="#FF3333"></Icon>&nbsp;&nbsp;批量删除</button> -->
-
         </div>
         <div class="panel-end">
-          <input type="text" v-model="searchText" class="search-input" placeholder="搜索">
+          <input type="text" v-model="searchText" class="search-input" placeholder="输入姓名">
           <button class="ui-btn ui-btn-default" @click="search()">&nbsp;&nbsp;
             <Icon type="ios-search" color="#0099ff"></Icon>&nbsp;&nbsp;</button>
         </div>
       </div>
-      <el-table style="margin-top:15px;width: 100%" :data="list" >
+      <el-table style="margin-top:15px;width: 100%" :data="list" @filter-change="filterChange">
+        <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="payAccountName" label="姓名"> </el-table-column>
         <el-table-column prop="payIdCard" label="身份证"> </el-table-column>
-        <el-table-column prop="subject" label="缴费项" :filters="payItemList" :filter-method="filterTagPayItem" filter-placement="bottom-end">
+        <el-table-column prop="subject" label="缴费项" :filters="payItemList" :filter-method="filterTagPayItem" filter-placement="bottom-end" column-key="payItemId">
         </el-table-column>
-        <el-table-column prop="schoolName" label="学校" :filters="schoolList" :filter-method="filterTagSchool" filter-placement="bottom-end">
+        <el-table-column prop="schoolName" label="学校" :filters="schoolList" :filter-method="filterTagSchool" filter-placement="bottom-end"
+          column-key="schoolName">
         </el-table-column>
-        <el-table-column prop="goSchoolTime" label="入学年限" :filters="gradeList" :filter-method="filterTagGrade" filter-placement="bottom-end">
+        <el-table-column prop="goSchoolTime" label="入学年限" :filters="gradeList" :filter-method="filterTagGrade" filter-placement="bottom-end"
+          column-key="goSchoolTime">
         </el-table-column>
-        <el-table-column prop="classes" label="班级" :filters="classList" :filter-method="filterTagClass" filter-placement="bottom-end">
+        <el-table-column prop="classes" label="班级" :filters="classList" :filter-method="filterTagClass" filter-placement="bottom-end"
+          column-key="classes">
         </el-table-column>
         <el-table-column prop="total_amount" label="金额"> </el-table-column>
-        <el-table-column label="是否缴费" prop="trade_status" :filters="[{text:'已缴费',value:'EDU_SUCCESS'},{text:'未缴费',value:'waitPay'}]" :filter-method="filterTagPay" filter-placement="bottom-end">
+        <el-table-column label="是否缴费" prop="trade_status" :filters="[{text:'已缴费',value:'EDU_SUCCESS'},{text:'未缴费',value:'waitPay'}]"
+          :filter-method="filterTagPay" filter-placement="bottom-end" column-key="trade_status">
           <template slot-scope="scope">
             <Icon type="checkmark-round" v-if="scope.row.trade_status=='EDU_SUCCESS'" color="green"></Icon>
             <Icon type="close-round" v-if="scope.row.trade_status!='EDU_SUCCESS'" color="red"></Icon>
@@ -52,7 +56,7 @@
         </el-table-column>
       </el-table>
       <el-pagination style="float:right;margin-top:30px" @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :current-page="query.pages.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="query.pages.size" layout="total, sizes, prev, pager, next, jumper"
+        :current-page="query.pages.currentPage" :page-sizes="[20, 500, 1000, 5000]" :page-size="query.pages.size" layout="total, sizes, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
       <div class="clearfix"></div>
@@ -121,12 +125,17 @@
           fields: [],
           wheres: [
             { value: 'schoolId', opertionType: 'equal', opertionValue: JSON.parse(localStorage.getItem('school')).result.sunwouId },
-            { value: 'isDelete', opertionType: 'equal', opertionValue: false }
+            { value: 'isDelete', opertionType: 'equal', opertionValue: false },
+            { value: 'payItemId', opertionType: 'like', opertionValue: "" },
+            { value: 'classes', opertionType: 'like', opertionValue: '' },
+            { value: 'goSchoolTime', opertionType: 'like', opertionValue: '' },
+            { value: 'schoolName', opertionType: 'like', opertionValue: '' },
+            { value: 'trade_status', opertionType: 'like', opertionValue: '' }
           ],
           sorts: [],
           pages: {
             currentPage: 1,
-            size: 10
+            size: 20
           }
         },
         transData: {
@@ -156,12 +165,46 @@
       that.getSchoolList();
     },
     methods: {
+       changeFilterQuery(conditions, num) {
+        if (conditions[1] != undefined) {
+          that.query.wheres[num].opertionType = 'regex';
+          let opertionValue = '';
+          for (let i = 0; i < conditions.length; i++) {
+            opertionValue = opertionValue + conditions[i] + '|';
+          }
+          opertionValue = opertionValue.substr(0, opertionValue.length - 1);
+          that.query.wheres[num].opertionValue = opertionValue;
+        } else if (conditions[0] != undefined) {
+          that.query.wheres[num].opertionType = 'equal';
+          that.query.wheres[num].opertionValue = conditions[0];
+        } else {
+          that.query.wheres[num].opertionType = 'like';
+          that.query.wheres[num].opertionValue = '';
+        }
+      },
+      filterChange(filters) {
+        if (filters.payItemId != undefined) {
+          that.changeFilterQuery(filters.payItemId, 2);
+        } else if (filters.classes != undefined) {
+          that.changeFilterQuery(filters.classes, 3);
+        } else if (filters.goSchoolTime != undefined) {
+          that.changeFilterQuery(filters.goSchoolTime, 4);
+        } else if (filters.schoolName != undefined) {
+          that.changeFilterQuery(filters.schoolName, 5);
+        } else if (filters.trade_status != undefined) {
+          that.changeFilterQuery(filters.trade_status, 6);
+        }
+        that.getPaymentList();
+      },
        putOut() {
-
+        console.info(JSON.stringify(that.query))
+        let sb = JSON.stringify(that.query).replace(/\"/g, "%22").replace(/\{/g, "%7b").replace(/\}/g, "%7d");
+        console.info(sb)
+        window.open(sessionStorage.getItem("API") + "trans/outExcel?query=" + sb)
       },
        returnFee(payment) {
         that.returnPay.sunwouId = payment.sunwouId;
-        that.returnPay.max = payment.total_amount;
+        that.returnPay.max = payment.total_amount*1;
         that.returnModal = true;
       },
       submitReturn() {
@@ -184,14 +227,14 @@
       },
 
       search() {
-        if (this.query.wheres.length == 2) {
+        if (this.query.wheres.length == 8) {
           this.query.wheres.push({
             value: "payAccountName",
             opertionType: "like",
             opertionValue: this.searchText
           });
         } else {
-          this.query.wheres[2].opertionValue = this.searchText;
+          this.query.wheres[8].opertionValue = this.searchText;
         }
         this.getPaymentList();
       },
