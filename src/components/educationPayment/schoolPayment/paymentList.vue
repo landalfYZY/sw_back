@@ -38,9 +38,19 @@
             <Icon type="close-round" v-if="scope.row.trade_status!='EDU_SUCCESS'" color="red"></Icon>
           </template>
         </el-table-column>
+        <el-table-column prop="refund_fee1" label="退款">
+          <template slot-scope="scope">
+            {{scope.row.refund_fee1?scope.row.refund_fee1:0}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="factPayMoney" label="实际缴费">
+         
+        </el-table-column>
         <el-table-column label="操作" width="120">
           <template slot-scope="scope">
             <Button size="small" :disabled="scope.row.trade_status!='EDU_SUCCESS'" @click="returnFee(scope.row)">退款</Button>
+              <Button size="small" type="error" v-if="!scope.row.isShow" @click="down(scope.row)">下架</Button>
+              <Button size="small" type="success" v-if="scope.row.isShow" @click="up(scope.row)">上架</Button>
             <!-- <el-dropdown size="mini" split-button type="default" trigger="click">
               <div @click="transadd(scope.row.idCard)">缴费</div>
               <el-dropdown-menu slot="dropdown">
@@ -165,6 +175,40 @@
       that.getSchoolList();
     },
     methods: {
+       down(row) {
+        $.ajax({
+          url: sessionStorage.getItem("API") + "trans/updateMu",
+          type: "POST",
+          data: { ids: row.sunwouId, isShow: true },
+          dataType: "json",
+          success(res) {
+            if (res.code) {
+              console.info()
+              row.isShow = true;
+              that.$Message.success('下架成功');
+            } else {
+              that.$Message.error('下架失败');
+            }
+          }
+        });
+      },
+      up(row) {
+        $.ajax({
+          url: sessionStorage.getItem("API") + "trans/updateMu",
+          type: "POST",
+          data: { ids: row.sunwouId, isShow: false },
+          dataType: "json",
+          success(res) {
+            if (res.code) {
+              console.info()
+              row.isShow = false;
+              that.$Message.success('上架成功');
+            } else {
+              that.$Message.error('上架失败');
+            }
+          }
+        });
+      },
        changeFilterQuery(conditions, num) {
         if (conditions[1] != undefined) {
           that.query.wheres[num].opertionType = 'regex';
@@ -215,9 +259,27 @@
           dataType: "json",
           success(res) {
             if (res.code) {
-              that.$Message.success(res.msg);
+               that.$Notice.success({
+                title: '成功退款',
+                desc: '成功退款' + that.returnPay.refund_fee1 + '元',
+                duration: 0
+              });
+              that.getPaymentList();
+              that.returnPay = {
+                appid: 'wx52824aa6f56489e9',
+                appSecret: '73bf828a7cb0257fab919a9f580b6a3e',
+                merchantNumber: '1503604781',
+                merchantSecret: 'LHJYMRYQCCNMBTHZSWWLKJYXGS717SUN',
+                sunwouId: '',
+                refund_fee1: 0,
+                max: 0
+              };
             } else {
-              that.$Message.error(res.msg);
+               that.$Notice.error({
+                title: '退款失败',
+                desc: '退款失败' + res.msg,
+                duration: 0
+              });
             }
           }
         });
@@ -227,14 +289,14 @@
       },
 
       search() {
-        if (this.query.wheres.length == 8) {
+        if (this.query.wheres.length == 7) {
           this.query.wheres.push({
             value: "payAccountName",
             opertionType: "like",
             opertionValue: this.searchText
           });
         } else {
-          this.query.wheres[8].opertionValue = this.searchText;
+          this.query.wheres[7].opertionValue = this.searchText;
         }
         this.getPaymentList();
       },
